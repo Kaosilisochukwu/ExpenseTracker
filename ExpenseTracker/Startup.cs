@@ -1,10 +1,18 @@
+using ExpenseTracker.Context;
+using ExpenseTracker.Models;
+using ExpenseTracker.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace ExpenseTracker
 {
@@ -21,10 +29,49 @@ namespace ExpenseTracker
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(setUpAction =>
+            {
+                setUpAction.ReturnHttpNotAcceptable = true;
 
-            // In production, the React files will be served from this directory
-            services.AddSpaStaticFiles(configuration =>
+            }).AddXmlDataContractSerializerFormatters();
+
+            services.AddDbContextPool<AppDbContext>(option =>
+                                                    option.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IExpensesRepository, ExpensesRepository>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            services.AddIdentityCore<ApplicationUser>().AddEntityFrameworkStores<AppDbContext>();
+            services.AddHttpContextAccessor();
+
+
+
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+
+           // Adding Jwt Bearer  
+           .AddJwtBearer(options =>
+           {
+               options.SaveToken = true;
+               options.RequireHttpsMetadata = false;
+               options.TokenValidationParameters = new TokenValidationParameters()
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidAudience = Configuration["JWT:Issuer"],
+                   ValidIssuer = Configuration["JWT:Issuer"],
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Key"]))
+               };
+           });
+
+
+
+        // In production, the React files will be served from this directory
+        services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/build";
             });
@@ -47,8 +94,9 @@ namespace ExpenseTracker
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
             app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
