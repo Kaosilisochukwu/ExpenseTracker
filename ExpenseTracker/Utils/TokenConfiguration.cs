@@ -26,14 +26,15 @@ namespace ExpenseTracker.Utils
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
             }
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("Jwt:SigninKey").Value));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.GetSection("Jwt:Key").Value));
 
             var credential = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
+                Issuer = config["Jwt:Issuer"],
+                Audience = config["Jwt:Issuer"],
                 SigningCredentials = credential,
                 Expires = DateTime.Now.AddDays(1)
             };
