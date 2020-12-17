@@ -1,26 +1,84 @@
-import React, { Component } from 'react';
+import React from 'react';
+import Login from './Login';
+import styled from 'styled-components'
+import { Link } from 'react-router-dom';
+import Input from './Input';
+import Register from './Register';
 
-export class Home extends Component {
-  static displayName = Home.name;
+export const Home = () => {
 
-  render () {
     return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we have also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
+        <HomePage>
+            <img src="images/pexels-karolina-grabowska-4475523.jpg" alt="background image" />
+            <h1 className="head-primary">Expense Tracker</h1>
+            <h3 className="head-secondary">Personal & Community Finance and Expense Tracking app.</h3>
+            <h5 className="home-paragraph">Keep track of your personal or business finances and mantain a control on your expenses, income and budget.
+                 Unlimited accounts and categories powered by AJAX to provide a better user experience.</h5>
+            <Link className="home-btn">Gets Started</Link>
+            <Register />
+            <Login />
+            <Input placeholder= "email" />
+        </HomePage>
     );
-  }
 }
+
+const PageLayout = styled.div`
+    height: 95vh;
+    background-color: rgba(4, 59, 255, 0.48);
+    position: relative;
+    img{
+        position: absolute;
+        width: 100%;
+        height: 95vh;
+        z-index: -2;
+    }
+`
+
+const HomePage = styled.div`
+    color: white;
+    align-text: center;
+    line-height:85px;
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+    background-color: rgba(4, 59, 255, 0.48);
+    position: relative;
+    img{
+        position: absolute;
+        width: 100%;
+        height: 95vh;
+        z-index: -2;
+    }
+ 
+    .head-primary{
+        font-weight: 800;
+        text-align: center;
+        font-size: 5.5rem;
+    }
+    .head-secondary{
+        font-weight: 600;
+        font-size: 2.5rem;
+        text-align:center;
+        line-height: 2.5rem;
+    }
+    .home-paragraph{
+        font-weight: 500;
+        font-size: 1.5rem;
+        text-align:center;
+        line-height: 2.5rem;
+        margin-top: 1.5em;
+    }
+    .home-btn{
+        align-self: center;
+        border: none;
+        background-color: #0A05FF;
+        border-radius: 6px;
+        margin-top:2em;
+        padding: 1.5em;
+        color: white;
+        line-height: 0;
+    }
+    .home-btn:hover{
+        background-color: #0804C7;
+    }
+`
