@@ -30,13 +30,15 @@ namespace ExpenseTracker.Controllers
         {
             if (ModelState.IsValid)
             {
+                var whatever = _httpContextAccessor.HttpContext.Request;
+                var currnetUserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
                 var expense = new Expense
                 {
                     Description = expenseToRegister.Description,
                     VAT = expenseToRegister.VAT,
                     Amount = expenseToRegister.Amount,
                     Date = DateTime.Now,
-                    UserId = expenseToRegister.UserId
+                    UserId = currnetUserId
                 };
                 var rowsAffected = await _expenseRepo.SaveTransaction(expense);
                 if (rowsAffected > 0)
@@ -47,17 +49,17 @@ namespace ExpenseTracker.Controllers
             return BadRequest();
         }
 
-        [Route("{userId}")]
-        public async Task<ActionResult> GetExpensesAsync(string userId)
+
+        public async Task<ActionResult> GetExpensesAsync()
         {
             try
             {
                 var whatever = _httpContextAccessor.HttpContext.Request;
                 var currnetUserId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-                if (userId != currnetUserId)
-                    return Unauthorized();
-                var expenses = await _expenseRepo.GetExpensesByUserId(userId);
-                if (expenses == null || expenses.Count() < 1)
+                //if (userId != currnetUserId)
+                //    return Unauthorized();
+                var expenses = await _expenseRepo.GetExpensesByUserId(currnetUserId);
+                if (expenses == null)
                 {
                     return NotFound();
                 }

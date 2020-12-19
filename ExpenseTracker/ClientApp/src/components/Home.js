@@ -14,10 +14,7 @@ export const Home = () => {
             <h3 className="head-secondary">Personal & Community Finance and Expense Tracking app.</h3>
             <h5 className="home-paragraph">Keep track of your personal or business finances and mantain a control on your expenses, income and budget.
                  Unlimited accounts and categories powered by AJAX to provide a better user experience.</h5>
-            <Link className="home-btn">Gets Started</Link>
-            <Register />
-            <Login />
-            <Input placeholder= "email" />
+            <Link to="/register" className="home-btn">Gets Started</Link>
         </HomePage>
     );
 }

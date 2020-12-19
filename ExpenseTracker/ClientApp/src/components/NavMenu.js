@@ -1,49 +1,62 @@
-import React, { Component } from 'react';
-import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+//import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
+import { Link, useHistory } from 'react-router-dom';
+import styled from 'styled-components'
 import './NavMenu.css';
 
-export class NavMenu extends Component {
-  static displayName = NavMenu.name;
+export const NavMenu = ({ isLoggedIn, setlogin }) => {
 
-  constructor (props) {
-    super(props);
+    let history = useHistory();
+    const handleLogout = () => {
+        localStorage.removeItem("token")
+        setlogin(false);
+        history.push("/login")
+    }
 
-    this.toggleNavbar = this.toggleNavbar.bind(this);
-    this.state = {
-      collapsed: true
-    };
-  }
-
-  toggleNavbar () {
-    this.setState({
-      collapsed: !this.state.collapsed
-    });
-  }
-
-  render () {
-    return (
-      <header>
-        <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
-          <Container>
-            <NavbarBrand tag={Link} to="/">ExpenseTracker</NavbarBrand>
-            <NavbarToggler onClick={this.toggleNavbar} className="mr-2" />
-            <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
-              <ul className="navbar-nav flex-grow">
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/counter">Counter</NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/fetch-data">Fetch data</NavLink>
-                </NavItem>
-              </ul>
-            </Collapse>
-          </Container>
-        </Navbar>
-      </header>
-    );
-  }
+    return(
+        isLoggedIn ? 
+            <Header>
+                <Link to="/" className="home">Home</Link>             
+                < ul className="auth-links">
+                    <li>
+                        <Link to="/" className="text-light home" > Logout</Link>
+                    </li>
+                </ul>
+            </Header>
+            
+    : 
+        <Header>
+            <Link className="home">Home</Link>
+            < ul className="auth-links">
+                <li>
+                    <Link to="/register" className="text-light home">Register</Link>
+                </li>
+                <li className="pl-5">
+                    <Link to="/login" className="text-light home">Login</Link>
+                </li>
+            </ul>
+          </Header>
+    )
 }
+
+const Header = styled.header`
+    background-color: blue;
+    padding: 1em 4em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .home{
+        color: white;
+        text-decoration: none;
+        background: none;
+    }
+    .auth-links{
+        list-style-type: none;
+        display: flex;
+        align-items: center;
+        margin: 0;
+        flex-basis: 75%;
+        justify-content: flex-end;
+    }
+`

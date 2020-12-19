@@ -18,7 +18,7 @@ namespace ExpenseTracker.DTOs
         [Required(ErrorMessage = "Date field is required")]
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "User Id is required")]
-        public string UserId { get; set; }
+        //[Required(ErrorMessage = "User Id is required")]
+        //public string UserId { get; set; }
     }
 }

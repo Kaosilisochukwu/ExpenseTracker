@@ -1,19 +1,63 @@
-﻿import React from 'react'
-import { Link } from 'react-router-dom'
+﻿import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import styled from 'styled-components'
-import Input from './Input'
 
 
 
-const Login = () => {
+const Login = ({ setlogin }) => {
+
+    let history = useHistory()
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleEmail = e => {
+        setEmail(e.target.value);
+    }
+
+    const handlePassword = e => {
+        setPassword(e.target.value);
+    }
+    const handleSubmit = async e => {
+        e.preventDefault();
+        const data = {
+            "Email": email,
+            "Password": password
+        }
+        setlogin(true)
+        login(data)
+    }
+
+    const login = async data => {
+        const response = await fetch("api/user/signin", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        if (response.ok) {
+            alert("cool")
+            console.log(response)
+            const data = await response.json()
+            localStorage.setItem("token", data.token)
+            history.push("/expenses")
+        } else {
+            alert("not cool")
+            console.log(response)
+        }
+    }
+
     return (
         <>
             <SignIn>
-                <h1>Login</h1>
-                <Input placeholder="Email" />
-                <Input placeholder="Password" />
-                <Link className="home-btn">Login</Link>
-                <p>Don't have an account?  <Link style={{ color: "#0A05FF" }}>Login</Link></p>
+                <form onSubmit={handleSubmit}>
+                    <h1>Login</h1>
+                    <input placeholder="Email" onChange={handleEmail} />
+                    <input placeholder="Password" onChange={handlePassword} />
+                    <button className="home-btn" type="submit">Login</button>
+                    <p>Don't have an account?  <Link to="/register" style={{ color: "#0A05FF" }}>Register</Link></p>
+                </form>
             </SignIn>
         </>
         )
@@ -22,14 +66,26 @@ const Login = () => {
 export default Login;
 
 const SignIn = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;    
     color: white;
-    padding-top: 20vh;
+    padding-top: 2rem;
     background-color: rgba(4, 59, 255, 0.48);
-    height: 95vh;
-
+    min-height: 95vh;
+    form{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+ input{
+        background-color: white;
+        width: 33%;
+        line-height: 0;
+        height: 35px;
+        outline: none;
+        border-radius: 6px;
+        border: none;
+        padding-left: 15px;
+        margin-top: 2rem;
+}
     .home-btn{
         align-self: center;
         border: none;
@@ -41,7 +97,6 @@ const SignIn = styled.div`
         line-height: 0;
         width: 33%;
         text-align: center;
-        text-decoration: none;
     }
     .home-btn:hover{
         background-color: #0804C7;

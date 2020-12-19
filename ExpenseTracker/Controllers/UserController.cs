@@ -43,9 +43,9 @@ namespace ExpenseTracker.Controllers
                 {
                     return Created("signup", user);
                 }
-                return BadRequest();
+                return BadRequest("something bad");
             }
-            return BadRequest();
+            return BadRequest("another bad thing");
         }
 
         [HttpPost]
@@ -63,7 +63,7 @@ namespace ExpenseTracker.Controllers
                 if (signinResult.Succeeded)
                 {
                     var token = TokenConfiguration.GenerateToken(user, _config);
-                    return Ok(token);
+                    return Ok(new { token });
                 }
             }
             return BadRequest();
