@@ -1,15 +1,12 @@
 import React from 'react';
-import Login from './Login';
 import styled from 'styled-components'
 import { Link } from 'react-router-dom';
-import Input from './Input';
-import Register from './Register';
 
 export const Home = () => {
 
     return (
         <HomePage>
-            <img src="images/pexels-karolina-grabowska-4475523.jpg" alt="background image" />
+            <img src="images/pexels-karolina-grabowska-4475523.jpg" alt="background" />
             <h1 className="head-primary">Expense Tracker</h1>
             <h3 className="head-secondary">Personal & Community Finance and Expense Tracking app.</h3>
             <h5 className="home-paragraph">Keep track of your personal or business finances and mantain a control on your expenses, income and budget.
@@ -19,17 +16,7 @@ export const Home = () => {
     );
 }
 
-const PageLayout = styled.div`
-    height: 95vh;
-    background-color: rgba(4, 59, 255, 0.48);
-    position: relative;
-    img{
-        position: absolute;
-        width: 100%;
-        height: 95vh;
-        z-index: -2;
-    }
-`
+
 
 const HomePage = styled.div`
     color: white;

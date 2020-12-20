@@ -1,6 +1,5 @@
 ﻿import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 
 const Expenses = () => {
 
@@ -12,12 +11,9 @@ const Expenses = () => {
     const [amount, setAmount] = useState(0);
     const [VAT, setVAT] = useState(0);
     const [transctionDate, setTransctionDate] = useState(new Date())
-    const [userId, setUserId] = useState("");
     const [currency, setCurrency] = useState("GBP")
 
 
-    const handleChange = (e) => {
-    }
 
 
     const getExpenses = async () => {
@@ -98,18 +94,18 @@ const Expenses = () => {
         setCurrency(e.target.value)
     }
 
-    useEffect( async () => {
-        if (localStorage.getItem("token")) {
-            await getExpenses();
-        }
-        fetch("https://localhost:44385/api/expenses")
-
-        fetch("https://api.exchangeratesapi.io/latest")
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.rates.GBP)
-                setRate(data.rates.GBP)
-            })
+    useEffect(() => {
+        (async () => {
+            if (localStorage.getItem("token")) {
+                await getExpenses();
+                fetch("https://api.exchangeratesapi.io/latest")
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.rates.GBP)
+                        setRate(data.rates.GBP)
+                    })
+            }
+        })()
     }, [])
 
     return (
@@ -120,9 +116,9 @@ const Expenses = () => {
                 <div className="expense-input">
                     <input className="amount" type="number" placeholder="Amount" required onChange={handleAmount} />
                     <label>select currency:
-                        <select className="currency" onChange={handleCurrency} >
-                            <option value="EUR">ERU</option>
-                            <option value="GBP" selected>GBP</option>
+                        <select className="currency" onChange={handleCurrency} defaultValue="EUR">
+                            <option value="EUR">EUR</option>
+                            <option value="GBP">GBP</option>
                         </select>
                     </label>
                     <label>VAT:

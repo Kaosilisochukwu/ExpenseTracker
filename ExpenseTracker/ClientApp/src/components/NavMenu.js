@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 //import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components'
@@ -7,7 +7,8 @@ import './NavMenu.css';
 export const NavMenu = ({ isLoggedIn, setlogin }) => {
 
     let history = useHistory();
-    const handleLogout = () => {
+    const handleLogout = (e) => {
+        e.preventDefault()
         localStorage.removeItem("token")
         setlogin(false);
         history.push("/login")
@@ -19,14 +20,14 @@ export const NavMenu = ({ isLoggedIn, setlogin }) => {
                 <Link to="/" className="home">Home</Link>             
                 < ul className="auth-links">
                     <li>
-                        <Link to="/" className="text-light home" > Logout</Link>
+                        <Link to="/login" className="text-light home" onClick={handleLogout} > Logout</Link>
                     </li>
                 </ul>
             </Header>
             
     : 
         <Header>
-            <Link className="home">Home</Link>
+            <Link className="home" to="/">Home</Link>
             < ul className="auth-links">
                 <li>
                     <Link to="/register" className="text-light home">Register</Link>

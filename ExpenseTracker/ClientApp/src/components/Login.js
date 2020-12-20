@@ -84,7 +84,7 @@ const SignIn = styled.div`
         border-radius: 6px;
         border: none;
         padding-left: 15px;
-        margin-top: 2rem;
+        margin-top: 1rem;
 }
     .home-btn{
         align-self: center;

@@ -1,5 +1,4 @@
 ﻿import React, { useState } from 'react'
-import Input from './Input'
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 
@@ -130,7 +129,7 @@ const RegisterStyle = styled.div`
         border-radius: 6px;
         border: none;
         padding-left: 15px;
-        margin-top: 2rem;
+        margin-top: 1rem;
 }
     .home-btn:hover{
         background-color: #0804C7;
