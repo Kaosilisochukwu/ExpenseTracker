@@ -25,6 +25,7 @@ namespace ExpenseTracker.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        [Route("", Name = "AddExpenses")]
         [HttpPost]
         public async Task<ActionResult> AddExpense(ExpenseToRegisterDTO expenseToRegister)
         {
@@ -37,13 +38,13 @@ namespace ExpenseTracker.Controllers
                     Description = expenseToRegister.Description,
                     VAT = expenseToRegister.VAT,
                     Amount = expenseToRegister.Amount,
-                    Date = DateTime.Now,
+                    Date = expenseToRegister.Date,
                     UserId = currnetUserId
                 };
                 var rowsAffected = await _expenseRepo.SaveTransaction(expense);
                 if (rowsAffected > 0)
                 {
-                    return Ok();
+                    return Created("AddExpenses", expense);
                 }
             }
             return BadRequest();

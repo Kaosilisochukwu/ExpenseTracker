@@ -1,5 +1,4 @@
 import React from 'react';
-//import { Collapse, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
 import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components'
 import './NavMenu.css';
@@ -20,6 +19,9 @@ export const NavMenu = ({ isLoggedIn, setlogin }) => {
                 <Link to="/" className="home">Home</Link>             
                 < ul className="auth-links">
                     <li>
+                        <Link to="/expenses" className="text-light home">Expenses</Link>
+                    </li>
+                    <li className="pl-5">
                         <Link to="/login" className="text-light home" onClick={handleLogout} > Logout</Link>
                     </li>
                 </ul>

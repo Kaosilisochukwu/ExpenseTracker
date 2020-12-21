@@ -9,9 +9,8 @@ const Expenses = () => {
 
     const [description, setDescription] = useState("");
     const [amount, setAmount] = useState(0);
-    const [VAT, setVAT] = useState(0);
     const [transctionDate, setTransctionDate] = useState(new Date())
-    const [currency, setCurrency] = useState("GBP")
+    const [currency, setCurrency] = useState("EUR")
 
 
 
@@ -26,18 +25,17 @@ const Expenses = () => {
             },
         })
         if (response.ok) {
-            alert("cool")
             console.log(response)
             const data = await response.json()
             console.log(data)
             setExpenses(data)
         } else {
-            alert("not cool")
             console.log(response)
         }
     }
 
     const addExpense = async data => {
+        try {
         const response = await fetch("api/expenses", {
             method: 'POST',
             headers: {
@@ -47,16 +45,15 @@ const Expenses = () => {
             },
             body: JSON.stringify(data)
         })
-        if (response.ok) {
-            alert("cool")
-            console.log(response)
-            const data = await response.json()
-            console.log(data)
-            setExpenses(data)
-        } else {
-            alert("not cool")
-            console.log(response)
+            const expense = await response.json();
+            console.log(expense)
+            console.log(expenses)
+            setExpenses([...expenses, expense])
+
+        }catch(error) {
+            console.log(error.response)
         }
+        
     }
 
     const handleSubmit = async e => {
@@ -65,7 +62,7 @@ const Expenses = () => {
         const data = {
             "Description": description,
             "Amount": currency === "EUR" ? amount * rate : amount,
-            "VAT": currency === "EUR" ? VAT * rate : VAT,
+            "VAT": currency === "EUR" ? vat * rate : vat,
             "Date": transctionDate
         }
         await addExpense(data)
@@ -78,19 +75,15 @@ const Expenses = () => {
 
     const handleAmount = e => {
         let currentVat = e.target.value ? (parseFloat(e.target.value) * 0.2).toFixed(2) : 0;
-        setVat(currentVat);
-        setAmount(e.target.value)
+        setVat(parseFloat(currentVat));
+        setAmount(parseFloat(e.target.value))
     }
-
-    const handleVAT = e => {
-        setVAT(e.target.value);
-    }
-
 
     const handleDate = e => {
         setTransctionDate(e.target.value);
     }
     const handleCurrency = e => {
+        console.log(e.target.value)
         setCurrency(e.target.value)
     }
 
@@ -122,7 +115,7 @@ const Expenses = () => {
                         </select>
                     </label>
                     <label>VAT:
-                        <input onChange={handleVAT} className="vat" type="text" disabled value={vat} required style={{ marginLeft: "10px" }} />
+                        <input className="vat" type="text" disabled value={vat} required style={{ marginLeft: "10px" }} />
                     </label>
                     <input className="date" type="date" placeholder="Date" required onChange={handleDate} />
                     <input className="description" type="textarea" placeholder="Description" required onChange={handleDescription} />
@@ -131,7 +124,7 @@ const Expenses = () => {
             </form>
             <div className="">
                 <h1>Tabe of Expenses</h1>
-                <table className="table">
+                {expenses.length > 0 ? < table className="table">
                     <thead>
                         <tr>
                             <th scope="col">Date</th>
@@ -143,34 +136,16 @@ const Expenses = () => {
                     <tbody>
                         {expenses.map((expense, i) => {
                             return (
-                                <tr key={ i }>
-                                    <th scope="row">{expense.Date}</th>
-                                    <td>{expense.Description}</td>
-                                    <td>{expense.Amount}</td>
-                                    <td>@{expense.VAT}</td>
+                                <tr key={i}>
+                                    <th scope="row">{expense.date}</th>
+                                    <td>{expense.description}</td>
+                                    <td>{expense.amount}</td>
+                                    <td>{expense.vat}</td>
                                 </tr>
-                                )
+                            )
                         })}
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
                     </tbody>
-                </table>
+                </table> : <h1>You don not have any expense Record yet</h1>}
             </div>
         </ExpensesStyle>
         )
