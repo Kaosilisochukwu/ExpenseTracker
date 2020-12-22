@@ -6,6 +6,7 @@ import Login from './Login';
 import Expenses from './Expenses';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Protected from './Protected';
+import ErrorBoundary from './ErrorBoundary';
 
 export const Layout = ()  => {
 
@@ -15,7 +16,8 @@ export const Layout = ()  => {
 
     return (
         <Router>
-            <NavMenu isLoggedIn={isLoggedIn} setlogin={setIsLoggedIn}/>
+            <NavMenu isLoggedIn={isLoggedIn} setlogin={setIsLoggedIn} />
+            <ErrorBoundary>
                 <Switch>
                     <Route path="/login">
                         <Login setlogin={setIsLoggedIn} />
@@ -28,6 +30,7 @@ export const Layout = ()  => {
                         <Home />
                     </Route>
                 </Switch>
+            </ErrorBoundary>
             </Router>
     );
 }

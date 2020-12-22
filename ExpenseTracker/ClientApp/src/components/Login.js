@@ -37,13 +37,11 @@ const Login = ({ setlogin }) => {
             body: JSON.stringify(data)
         })
         if (response.ok) {
-            alert("cool")
             console.log(response)
             const data = await response.json()
             localStorage.setItem("token", data.token)
             history.push("/expenses")
         } else {
-            alert("not cool")
             console.log(response)
         }
     }

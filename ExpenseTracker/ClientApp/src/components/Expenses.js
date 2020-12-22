@@ -123,7 +123,7 @@ const Expenses = () => {
                 </div>
             </form>
             <div className="">
-                <h1>Tabe of Expenses</h1>
+                <h1>Table of Expenses</h1>
                 {expenses.length > 0 ? < table className="table">
                     <thead>
                         <tr>
