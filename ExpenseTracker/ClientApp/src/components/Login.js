@@ -24,7 +24,6 @@ const Login = ({ setlogin }) => {
             "Email": email,
             "Password": password
         }
-        setlogin(true)
         login(data)
     }
 
@@ -40,9 +39,12 @@ const Login = ({ setlogin }) => {
             console.log(response)
             const data = await response.json()
             localStorage.setItem("token", data.token)
+            setlogin(true)
             history.push("/expenses")
         } else {
             console.log(response)
+            var tag = document.getElementById("login-err")
+            tag.innerHTML = "Incorrect email or Password"
         }
     }
 
@@ -51,8 +53,9 @@ const Login = ({ setlogin }) => {
             <SignIn>
                 <form onSubmit={handleSubmit}>
                     <h1>Login</h1>
+                    <p className="text-danger" id="login-err"></p>
                     <input placeholder="Email" onChange={handleEmail} />
-                    <input placeholder="Password" onChange={handlePassword} />
+                    <input placeholder="Password" type="password" onChange={handlePassword} />
                     <button className="home-btn" type="submit">Login</button>
                     <p>Don't have an account?  <Link to="/register" style={{ color: "#0A05FF" }}>Register</Link></p>
                 </form>

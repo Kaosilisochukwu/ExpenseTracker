@@ -6,6 +6,8 @@ import './NavMenu.css';
 export const NavMenu = ({ isLoggedIn, setlogin }) => {
 
     let history = useHistory();
+
+
     const handleLogout = (e) => {
         e.preventDefault()
         localStorage.removeItem("token")

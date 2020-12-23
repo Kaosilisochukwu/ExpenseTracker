@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import ExpenseForm from './ExpenseForm';
 
 const Expenses = () => {
 
@@ -11,7 +12,6 @@ const Expenses = () => {
     const [amount, setAmount] = useState(0);
     const [transctionDate, setTransctionDate] = useState(new Date())
     const [currency, setCurrency] = useState("EUR")
-
 
 
 
@@ -57,15 +57,20 @@ const Expenses = () => {
     }
 
     const handleSubmit = async e => {
-        e.preventDefault();
-        alert(localStorage.getItem("token"))
+        //e.preventDefault();
         const data = {
             "Description": description,
             "Amount": currency === "EUR" ? amount * rate : amount,
             "VAT": currency === "EUR" ? vat * rate : vat,
             "Date": transctionDate
         }
-        await addExpense(data)
+        if (data.Amount > 0) {
+            await addExpense(data)
+            alert("Expense successfully saved")
+        } else {
+            let formField = document.getElementById("amount-err")
+            formField.innerHTML = "Amount must be greater than 0"
+        }
 
     }
 
@@ -101,27 +106,21 @@ const Expenses = () => {
         })()
     }, [])
 
+    const formatDate = (date) =>{
+        var formatedDate = date.split("T")[0].replaceAll("-", "/")
+        return formatedDate;
+    }
+
     return (
-       
         <ExpensesStyle>
-            <form onSubmit={handleSubmit} >
-                <h4>Add an Expense</h4>
-                <div className="expense-input">
-                    <input className="amount" type="number" placeholder="Amount" required onChange={handleAmount} />
-                    <label>select currency:
-                        <select className="currency" onChange={handleCurrency} defaultValue="EUR">
-                            <option value="EUR">EUR</option>
-                            <option value="GBP">GBP</option>
-                        </select>
-                    </label>
-                    <label>VAT:
-                        <input className="vat" type="text" disabled value={vat} required style={{ marginLeft: "10px" }} />
-                    </label>
-                    <input className="date" type="date" placeholder="Date" required onChange={handleDate} />
-                    <input className="description" type="textarea" placeholder="Description" required onChange={handleDescription} />
-                    <button className="save" type= "submit"  >Save Expense</button>
-                </div>
-            </form>
+            <ExpenseForm
+                handleSubmit={handleSubmit}
+                handleDescription={handleDescription}
+                handleAmount={handleAmount}
+                handleDate={handleDate}
+                handleCurrency={handleCurrency}
+                vat={vat}
+                />
             <div className="">
                 <h1>Table of Expenses</h1>
                 {expenses.length > 0 ? < table className="table">
@@ -137,7 +136,7 @@ const Expenses = () => {
                         {expenses.map((expense, i) => {
                             return (
                                 <tr key={i}>
-                                    <th scope="row">{expense.date}</th>
+                                    <th scope="row">{formatDate(expense.date)}</th>
                                     <td>{expense.description}</td>
                                     <td>{expense.amount}</td>
                                     <td>{expense.vat}</td>

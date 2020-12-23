@@ -85,11 +85,11 @@ const Register = () => {
                 <input placeholder="Email" onChange={handleEmail} required type="email" />
                 <input placeholder="Phone Number" onChange={handlePhone} required />
                 <input placeholder="Username" onChange={handleUsername} required />
-                <input placeholder="Password" onChange={handlePassword} type="password" required />
+                <input placeholder="Password" type="password" onChange={handlePassword} type="password" required />
                 <p style={{ width: "33%" }}>password upto 8 characters must contain alpahbets
                 both upper and lower cases a number and a non
                 alpha-numeric character</p>
-                <input placeholder="Confirm Password" onChange={handleConfirm} type="password" required/>
+                <input placeholder="Confirm Password" type="password" onChange={handleConfirm} type="password" required/>
                 <button className="home-btn" type="submit" >Register</button>
                 <p className="reg-link">Already have an account? <Link to="/login" style={{ color: "#0804C7" }}>Login</Link></p>
             </form>
